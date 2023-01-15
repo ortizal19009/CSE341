@@ -1,7 +1,6 @@
 const { getDb } = require("../DB/conection");
 const { ObjectId } = require("mongodb");
 const express = require("express");
-const router = express.Router();
 const getContacts = (req, res) => {
   const db = getDb();
   let clients = [];
@@ -17,7 +16,6 @@ const getContacts = (req, res) => {
 };
 const getContactsById = (req, res) => {
   const db = getDb();
-  let clients = [];
   db.collection("contacts")
     .findOne({ _id: ObjectId(req.params.id) })
     .then((doc) => {

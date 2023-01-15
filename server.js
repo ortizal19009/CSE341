@@ -4,7 +4,6 @@ const app = express();
 const port = process.env.PORT || 3000;
 const { ConectionDb } = require("./DB/conection");
 /* DB CONECTION */
-let db;
 ConectionDb((err) => {
   if (!err) {
     app.listen(port, () => {
@@ -15,5 +14,4 @@ ConectionDb((err) => {
   }
 });
 /* ROUTES */
-
 app.use("/", require("./routes"));
