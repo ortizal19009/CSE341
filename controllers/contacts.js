@@ -1,6 +1,6 @@
 const { getDb } = require("../DB/conection");
 const { ObjectId } = require("mongodb");
-const express = require("express");
+//const express = require("express");
 const getContacts = (req, res) => {
   const db = getDb();
   let clients = [];
@@ -25,4 +25,45 @@ const getContactsById = (req, res) => {
       res.status(500).json({ error: "Could not fetch the document by id" });
     });
 };
-module.exports = { getContacts, getContactsById };
+const postContact = (req, res) => {
+  const db = getDb();
+  const contact = req.body;
+  db.collection("contacts")
+    .insertOne(contact)
+    .then((result) => {
+      res.status(201).json(result);
+    })
+    .catch((err) => {
+      res.status(500).json({ err: "Could not create a new json " });
+    });
+};
+const deleteContact = (req, res) => {
+  const db = getDb();
+  db.collection("contacts")
+    .deleteOne({ _id: ObjectId(req.params.id) })
+    .then((result) => {
+      res.status(200).send(result);
+    })
+    .catch(() => {
+      res.status(500).json({ error: "Could not delete the document by id" });
+    });
+};
+const updateContact = (req, res) => {
+  const db = getDb();
+  const contact = req.body;
+  db.collection("contacts")
+    .updateOne({ _id: ObjectId(req.params.id) }, { $set: contact })
+    .then((result) => {
+      res.status(204).send(result);
+    })
+    .catch(() => {
+      res.status(500).json({ error: "Could not update the document by id" });
+    });
+};
+module.exports = {
+  getContacts,
+  getContactsById,
+  postContact,
+  deleteContact,
+  updateContact,
+};
